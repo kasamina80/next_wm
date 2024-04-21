@@ -1,2 +1,2 @@
-# generic_wm_next
+# next_wm
 the Next.js version of generic_wm

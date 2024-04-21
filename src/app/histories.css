@@ -1,0 +1,19 @@
+ul.history-list {
+  width: 60%;
+  left: 30%;
+}
+.kasamina {
+  font-size: 1.25rem;
+  margin-top: 0;
+  font-weight: 600;
+}
+.history-table-wrapper {
+  display: flex;
+  justify-content: center;
+  table {
+    text-align: left;
+    td:nth-child(2) {
+      padding-left: 1rem;
+    }
+  }
+}

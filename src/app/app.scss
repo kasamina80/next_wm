@@ -1,0 +1,113 @@
+#root {
+  width: 100%;
+  height: 100vh;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+body > div {
+  flex-grow: 1;
+}
+
+a {
+  font-weight: 500;
+  color: #9ca1ff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+h2 {
+  font-size: calc(1.5rem + 0.9vw);
+  margin-top: 0;
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+ul {
+  list-style: none;
+}
+
+dl {
+  margin-top: 0;
+  padding-top: 0.5em;
+}
+
+dt {
+  font-size: 2em;
+  padding: 0.5em 0;
+}
+
+.italic {
+  transform: skewX(-15deg);
+}
+
+.acronym-tooltip {
+  font-size: 0.6em;
+  background-color: #444;
+  color: #fff;
+  // Bootstrapは.acronym-tooltipのみの指定のためさらに詳細度を上げて指定する
+  &.tooltip{
+    margin-top: 0.45em;
+  }
+}
+
+.acronym-tooltip > .tooltip-arrow::before {
+  position: absolute;
+  content: "";
+  border-color: transparent;
+  border-right-color: transparent;
+  border-style: solid;
+  right: -1px;
+  border-width: calc(0.8rem * .5) 0.4rem calc(0.8rem * .5) 0;
+  border-right-color: #444;
+  margin-top: -0.65rem;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}

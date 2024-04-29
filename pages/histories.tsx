@@ -2,13 +2,11 @@ import Sidebar from '../components/Sidebar';
 import '../src/app/index.css'
 import '../src/app/app.scss'
 import '../src/app/histories.css'
-import type { WorkHistory } from '../seeds/histories';
-import historiesJson from '../seeds/histories';
+import type { WorkHistory } from "../seeds/histories_type.ts";
+import { PrismaClient } from '@prisma/client';
 
 type ItEngineerHistory = WorkHistory & { work_type: "it_engineer" };
 type IdolHistory = WorkHistory & { work_type: "idol" };
-
-console.log(historiesJson);
 
 const itEngineerHistoriesFilter = (histories: WorkHistory[]): ItEngineerHistory[] => {
   return histories.filter((history): history is ItEngineerHistory => history.work_type === "it_engineer");
@@ -19,10 +17,8 @@ const idolHistoriesFilter = (histories: WorkHistory[]): IdolHistory[] => {
 }
 
 const historyToDateText = (history: WorkHistory): string => {
-  const { start_on, end_on, content } = history;
-  console.log(typeof start_on);
-  console.log(start_on, end_on, content, end_on !== undefined)
-  if (end_on !== undefined) {
+  const { start_on, end_on } = history;
+  if (end_on !== null) {
     return `${start_on.toLocaleDateString()}～${end_on.toLocaleDateString()}`
   } else {
     if(history.point) {
@@ -52,19 +48,31 @@ const historyTable = (histories: WorkHistory[]): React.JSX.Element => {
   );
 }
 
-const histories: WorkHistory[] = JSON.parse(historiesJson, (key, value) => {
-  if ((key == "start_on" || key == "end_on") && value !== undefined) {
-    return new Date(value);
-  } else {
-    return value;
-  }
+
+export const getServerSideProps = (async () => {
+  // Fetch data from external API
+  const prisma = new PrismaClient();
+  const fetchedWorkHistories = await prisma.workHistory.findMany();
+  console.log(fetchedWorkHistories);
+  // Pass data to the page via props
+  // returnしたものはJSONになるが、Dateはserializableではないので、もう1段JSONをかませる
+  return { props: { historiesJson: JSON.stringify(fetchedWorkHistories) } };
 });
-const itEngineerHistories: ItEngineerHistory[] = itEngineerHistoriesFilter(histories);
-const idolHistories: IdolHistory[] = idolHistoriesFilter(histories);
 
-console.log(histories);
+const HistoriesPage = ({ historiesJson }: { historiesJson: string }) => {
+  // const [workHistories, setWorkHistories] = useState([] as WorkHistory[]);
 
-const HistoriesPage = () => {
+  const histories: WorkHistory[] = JSON.parse(historiesJson, (key, value) => {
+    if ((key == "start_on" || key == "end_on") && value !== null) {
+      return new Date(value);
+    } else {
+      return value;
+    }
+  });
+  const itEngineerHistories: ItEngineerHistory[] = itEngineerHistoriesFilter(histories);
+  const idolHistories: IdolHistory[] = idolHistoriesFilter(histories);
+  
+  console.log(histories);
   return (
     <div id="root">
       <Sidebar />

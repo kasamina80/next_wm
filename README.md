@@ -1,20 +1,43 @@
 ## 実行方法
-### DB関連
-- 先にローカルにDBを作っておく
-- `.env.development`に以下の形でDBへのパスを記載する:
-  - `DATABASE_URL="(DBの種類)://(ユーザ名):(パスワード)@(ホスト名):(ポート番号)/(DB名)?schema=public"`
-#### Dockerを使う場合
-TODO: docker-compose.ymlを用意する
+### WSLを使用する場合
 
-### 実行手順
+WSLから:
+```
+docker-compose up
+```
+
+### WSLを使用しない場合
+
+`.env`のパスを
+
+```
+DATABASE_URL="DBの種類://ユーザ:パスワード@ホスト:ポート番号/DB名?schema=public"
+```
+
+に書き換えてください。
+
+例:
+
+```
+DATABASE_URL="mysql://root:password@localhost:3306/next_wm?schema=public"
+```
+
+## 共通
+
+VSCodeターミナルもしくはPowershellから:
 ```
 npm install
 npx prisma generate
+npx prisma migrate dev
 npm run seed
 npm run dev
 ```
 
+### 解説
+- `npm prisma generate`は`bundle exec rails db:migrate`に対応します。
+- `npm run seed`は`bundle exec rails db:seed-fu`に対応します。
+  - 実際には、`ruby -e "eval(File.read('seeds.rb'))"`に近いことをやっています。
+
 ## 開発関連
-TODO: モデルを追加する手順を書く
 
-
+テーブル名は`WorkHistory`のような形式で作成される

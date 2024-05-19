@@ -24,6 +24,8 @@ DATABASE_URL="mysql://root:password@localhost:3306/next_wm?schema=public"
 
 ## 共通
 
+2つ目と3つ目は`npx`なので注意してください。
+
 VSCodeターミナルもしくはPowershellから:
 ```
 npm install
@@ -34,7 +36,6 @@ npm run dev
 ```
 
 ### 解説
-- `npm prisma generate`は`bundle exec rails db:migrate`に対応します。
 - `npm run seed`は`bundle exec rails db:seed-fu`に対応します。
   - 実際には、`ruby -e "eval(File.read('seeds.rb'))"`に近いことをやっています。
 

@@ -15,6 +15,7 @@
     "@types/react": "18.2.79",
     "@types/react-dom": "18.2.25",
     "autoprefixer": "10.4.19",
+    "cookie": "0.6.0",
     "dotenv": "^16.4.5",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.2",
@@ -30,6 +31,7 @@
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@types/cookie": "",
     "dotenv-cli": "^7.4.1"
   }
 }

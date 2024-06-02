@@ -26,3 +26,8 @@ model WorkHistory {
   work_type WorkType
   point     Boolean
 }
+
+model AccessCounter {
+  id        Int @id @default(autoincrement())
+  count     Int
+}

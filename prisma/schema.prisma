@@ -31,3 +31,11 @@ model AccessCounter {
   id        Int @id @default(autoincrement())
   count     Int
 }
+
+model Post {
+  id         Int @id @default(autoincrement())
+  username   String
+  content    String @db.Text
+  password   String? @db.VarChar(1024)
+  created_at DateTime
+}

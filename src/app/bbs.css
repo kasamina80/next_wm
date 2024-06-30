@@ -1,0 +1,17 @@
+.posts-wrapper {
+  padding-left: calc(20% + 16px);
+  padding-top: 8px;
+}
+
+.post-list {
+  text-align: left;
+}
+
+.post-list > .post {
+  margin-bottom: 16px;
+}
+
+.post-list > div > p {
+  margin: 0;
+}
+

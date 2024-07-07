@@ -4,6 +4,13 @@ import '../src/app/app.scss'
 import '../src/app/bbs.css'
 import type { Post } from "../seeds/post_type.ts";
 import { PrismaClient } from '@prisma/client';
+import { useForm } from "react-hook-form";
+
+type PostFormValues = {
+  username: string,
+  password: string,
+  content: string
+};
 
 const postList = (posts: Post[]): React.JSX.Element => {
   return (
@@ -45,6 +52,9 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
   });
 
   console.log(posts);
+
+  const { register, handleSubmit, formState: { errors } } = useForm<PostFormValues>();
+
   return (
     <div id="root">
       <Sidebar />
@@ -53,6 +63,25 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
           postList(posts)
         }
       </div>
+      <form className="post-form" onSubmit={ handleSubmit((data) => {
+        console.log(data);
+      }) }>
+        <div className="validation-errors">
+          <div>{errors.username && "名前を入力してください"}</div>
+          <div>{errors.content && "本文を入力してください"}</div>
+        </div>
+        <div>
+          <label htmlFor="username">名前</label>
+          <input {...register("username", { required: true })} />
+          <label htmlFor="password">削除用パスワード</label>
+          <input {...register("password")} type="password" />
+        </div>
+        <div>
+          <label htmlFor="content">本文</label>
+          <textarea {...register("content", { required: true })}></textarea>
+        </div>
+        <input type="submit" />
+      </form>
     </div>
   );
 }

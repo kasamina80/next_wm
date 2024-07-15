@@ -5,6 +5,7 @@ import '../src/app/bbs.css'
 import type { Post } from "../seeds/post_type.ts";
 import { PrismaClient } from '@prisma/client';
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 type PostFormValues = {
   username: string,
@@ -28,7 +29,6 @@ const postList = (posts: Post[]): React.JSX.Element => {
     </div>
   );
 }
-
 
 export const getServerSideProps = (async () => {
   // Fetch data from external API
@@ -54,6 +54,7 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
   console.log(posts);
 
   const { register, handleSubmit, formState: { errors } } = useForm<PostFormValues>();
+  const router = useRouter();
 
   return (
     <div id="root">
@@ -65,6 +66,15 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
       </div>
       <form className="post-form" onSubmit={ handleSubmit((data) => {
         console.log(data);
+        const fetchApi = async () => {
+        const response = await fetch('/api/save_bbs', { method: 'POST', body: JSON.stringify(data) });
+        const result = await response.json();
+        console.log(response, result);
+        if (response.status === 200) {
+          router.reload();
+        }
+    };
+    fetchApi();
       }) }>
         <div className="validation-errors">
           <div>{errors.username && "名前を入力してください"}</div>

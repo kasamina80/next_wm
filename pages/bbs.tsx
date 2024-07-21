@@ -1,7 +1,7 @@
 import Sidebar from '../components/Sidebar';
 import '../src/app/index.css'
 import '../src/app/app.scss'
-import '../src/app/bbs.css'
+import '../src/app/bbs.scss'
 import type { Post } from "../seeds/post_type.ts";
 import { PrismaClient } from '@prisma/client';
 import { useForm } from "react-hook-form";
@@ -63,35 +63,49 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
         {
           postList(posts)
         }
+        <form className="post-form" onSubmit={ handleSubmit((data) => {
+          console.log(data);
+          const fetchApi = async () => {
+          const response = await fetch('/api/save_bbs', { method: 'POST', body: JSON.stringify(data) });
+          const result = await response.json();
+          console.log(response, result);
+          if (response.status === 200) {
+            router.reload();
+          }
+          };
+          fetchApi();
+        }) }>
+          <div className="validation-errors">
+            <div>{errors.username && "名前を入力してください"}</div>
+            <div>{errors.content && "本文を入力してください"}</div>
+          </div>
+          <div id="username-input-wrapper">
+            <div id="username-input">
+              <label htmlFor="username">名前</label>
+              <input {...register("username", { required: true })} />
+            </div>
+            <div id="password-input">
+              <label htmlFor="password">削除用パスワード</label>
+              <input {...register("password")} type="password" />
+            </div>
+          </div>
+          <div id="content-input">
+            <label htmlFor="content">本文</label>
+            <textarea {...register("content", { required: true })} rows={ 5 }></textarea>
+          </div>
+          <div id="submit-wrapper">
+            <label></label>
+            <input type="submit" />
+          </div>
+        </form>
+        <div className="warning">
+          以下の場合は投稿が削除できなくなりますのでご注意ください。
+          <ul>
+            <li>削除用パスワードを入力しなかった場合</li>
+            <li>削除用パスワードを忘れた場合</li>
+          </ul>
+        </div>
       </div>
-      <form className="post-form" onSubmit={ handleSubmit((data) => {
-        console.log(data);
-        const fetchApi = async () => {
-        const response = await fetch('/api/save_bbs', { method: 'POST', body: JSON.stringify(data) });
-        const result = await response.json();
-        console.log(response, result);
-        if (response.status === 200) {
-          router.reload();
-        }
-    };
-    fetchApi();
-      }) }>
-        <div className="validation-errors">
-          <div>{errors.username && "名前を入力してください"}</div>
-          <div>{errors.content && "本文を入力してください"}</div>
-        </div>
-        <div>
-          <label htmlFor="username">名前</label>
-          <input {...register("username", { required: true })} />
-          <label htmlFor="password">削除用パスワード</label>
-          <input {...register("password")} type="password" />
-        </div>
-        <div>
-          <label htmlFor="content">本文</label>
-          <textarea {...register("content", { required: true })}></textarea>
-        </div>
-        <input type="submit" />
-      </form>
     </div>
   );
 }

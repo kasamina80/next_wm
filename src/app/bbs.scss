@@ -1,5 +1,5 @@
 .posts-wrapper {
-  padding-left: calc(20% + 16px);
+  padding-left: 16px;
   padding-top: 8px;
 }
 
@@ -13,8 +13,9 @@
   }
 }
 
-form {
+.post-form {
   text-align: left;
+  margin-left: 16px;
   label {
     width: 2.5rem;
     flex-shrink: 0;

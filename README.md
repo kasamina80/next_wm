@@ -1,12 +1,12 @@
 ## 実行方法
-### WSLを使用する場合
+### Dockerを使用する場合
 
 WSLから:
 ```
 docker-compose up
 ```
 
-### WSLを使用しない場合
+### Dockerを使用しない場合
 
 `.env`のパスを
 

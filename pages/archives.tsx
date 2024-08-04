@@ -6,7 +6,11 @@ const ProfilePage = () => {
     <div id="root">
       <Sidebar />
       <div className="App">
-        まだここには何もありません。
+        <h2>成果物</h2>
+        <dl>
+          <dt>アクセスカウンター</dt>
+          <dd>左に出ている数字です。</dd>
+        </dl>
       </div>
     </div>
   );

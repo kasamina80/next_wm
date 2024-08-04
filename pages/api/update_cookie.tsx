@@ -12,7 +12,7 @@ export default async function handler(
   let count = req.cookies.count;
   console.log(count);
 
-  if (count === undefined) {
+  if (count === undefined || isNaN(parseInt(count))) {
     try {
       console.log("db fetch");
       const prisma = new PrismaClient();

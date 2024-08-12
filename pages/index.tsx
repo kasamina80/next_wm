@@ -1,10 +1,36 @@
 import Sidebar from "../components/Sidebar";
 import Link from 'next/link';
+import { useEffect, useState } from "react";
 import '../src/app/index.css';
 import '../src/app/app.scss';
 import '../src/app/home.scss';
 
-const ProfilePage = () => {
+const command = ["ArrowUp", "ArrowDown", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+
+const IndexPage = () => {
+  const [successCount, setSuccessCount] = useState(0);
+  const handleKeyDownEnter = (event: KeyboardEvent) => {
+    console.log(event.key);
+    if (event.key === command[successCount]) {
+      console.log(successCount);
+      const newSuccessCount = successCount + 1;
+      setSuccessCount(newSuccessCount);
+      if (newSuccessCount == command.length) {
+        console.log("do something")
+      }
+    } else {
+      setSuccessCount(0);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDownEnter);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDownEnter);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [successCount]);
+
   return (
     <div id="root">
       <Sidebar />
@@ -28,4 +54,4 @@ const ProfilePage = () => {
   );
 }
 
-export default ProfilePage;
+export default IndexPage;

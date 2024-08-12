@@ -1,25 +1,39 @@
 import Sidebar from "../components/Sidebar";
 import Link from 'next/link';
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import '../src/app/index.css';
 import '../src/app/app.scss';
 import '../src/app/home.scss';
 
-const command = ["ArrowUp", "ArrowDown", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+type commandType = "normal" | "vim";
+
+const commands: { [key in commandType]: string[] } = {
+  normal: ["ArrowUp", "ArrowDown", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"],
+  vim: ["k", "j", "k", "j", "h", "l", "h", "l", "b", "a"]
+}
 
 const IndexPage = () => {
-  const [successCount, setSuccessCount] = useState(0);
+  const [successCount, setSuccessCount]: [number, Dispatch<SetStateAction<number>>] = useState(0);
+  // TODO: ここのanyを正確な型にする
+  const [currentCommand, setCurrentCommand]: [commandType, any] = useState("normal");
   const handleKeyDownEnter = (event: KeyboardEvent) => {
     console.log(event.key);
-    if (event.key === command[successCount]) {
-      console.log(successCount);
+    if (event.key === commands[currentCommand][successCount]) {
       const newSuccessCount = successCount + 1;
       setSuccessCount(newSuccessCount);
-      if (newSuccessCount == command.length) {
+      console.log(newSuccessCount);
+      if (newSuccessCount == commands[currentCommand].length) {
         console.log("do something")
       }
     } else {
-      setSuccessCount(0);
+      const nextCommandTypePair = Object.entries(commands).find(([commandType, commands]) => commands[0] === event.key);
+      if (nextCommandTypePair) {
+        setCurrentCommand(nextCommandTypePair[0]);
+        setSuccessCount(1);
+        console.log(1);
+      } else {
+        setSuccessCount(0);
+      }
     }
   };
 

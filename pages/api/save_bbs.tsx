@@ -15,13 +15,11 @@ export default async function handler(
     console.log("db write");
     const rawHash = JSON.parse(req.body);
     console.log(rawHash);
-    const hashedPassword = rawHash.password === "" ? null : bcrypt.hashSync(rawHash.password, 12); 
-
     // backend validation
     if (rawHash.username === "" || rawHash.content === "") {
       throw new Error("Post validation error");
     }
-    const dataToSave = { ...JSON.parse(req.body), password: hashedPassword, created_at: new Date() }
+    const dataToSave = { ...rawHash, created_at: new Date() }
     const result = await prisma.post.create({ data: dataToSave });
   } catch (error) {
     console.error(error);

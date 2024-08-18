@@ -6,6 +6,7 @@ import type { Post } from "../seeds/post_type.ts";
 import { PrismaClient } from '@prisma/client';
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import bcrypt from "bcryptjs";
 
 type PostFormValues = {
   username: string,
@@ -88,13 +89,16 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
           }
           <form className="post-form" onSubmit={ handleSubmit((data) => {
             console.log(data);
-            const fetchApi = async () => {
-            const response = await fetch('/api/save_bbs', { method: 'POST', body: JSON.stringify(data) });
-            const result = await response.json();
-            console.log(response, result);
-            if (response.status === 200) {
-              router.reload();
-            }
+            const hashedPassword = data.password === "" ? null : bcrypt.hashSync(data.password, 12); 
+            console.log(hashedPassword);
+            const dataToSend = { ...data, password: hashedPassword }
+              const fetchApi = async () => {
+              const response = await fetch('/api/save_bbs', { method: 'POST', body: JSON.stringify(dataToSend) });
+              const result = await response.json();
+              console.log(response, result);
+              if (response.status === 200) {
+                router.reload();
+              }
             };
             fetchApi();
           }) }>

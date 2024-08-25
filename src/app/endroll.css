@@ -1,0 +1,31 @@
+.endroll-wrapper {
+  animation: scroll 5s linear infinite;
+  #you-found-the-hidden-command {
+    height: 50vh;
+    width: 100vw;
+    display: table-cell;
+    text-align: center;
+    vertical-align: bottom;
+  }
+  #gap-after-message {
+    height: 85vh;
+  }
+  h2 {
+    margin: 15vh 0;
+  }
+  ul {
+    padding: 0;
+  }
+  #gap-before-ellipsis {
+    height: 15vh;
+  }
+  #gap-before-and-you {
+    height: 15vh;
+  }
+  #and-you {
+    margin-bottom: 100vh;
+  }
+  #thank-you-for-visiting {
+    margin: 50vh 0;
+  }
+}

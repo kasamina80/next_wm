@@ -11,12 +11,38 @@ const EndrollPage = (
     setIsEndroll(false);
   };
 
-  // 1秒後に自動スクロールを開始する
   useEffect(() => {
+    // 徐々に表れる
+    const blackoutElement = document.querySelector("#blackout") as HTMLElement;
+    const unBlackoutDuration = 2.0;
+    let currentOpacity = 1.0;
+    const frameRate = 50;
+    const unBlackout = () => new Promise((resolve) => {
+      const unBlackoutInterval = setInterval(() => {
+        currentOpacity -= unBlackoutDuration / frameRate;
+        blackoutElement.style.opacity = currentOpacity.toString();
+        console.log(currentOpacity);
+        if (currentOpacity <= 0) {
+          console.log("unBlackout ended");
+          clearInterval(unBlackoutInterval);
+          blackoutElement.remove();
+          resolve(null);
+        }
+      }, (unBlackoutDuration * 1000) / frameRate);
+    });
+
+    // 一定の時間待つ
+    const wait = (time: number) => new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(null);
+      }, time * 1000);
+    });
+
+    // 自動スクロール
     const targetElement = document.querySelector(".endroll-wrapper") as HTMLElement;
     const scrollDuration = 60;
     const scrollHeight = targetElement.offsetHeight;
-    const scrollCredits = () => {
+    const scrollCredits = () => new Promise((resolve) => {
       const scrollStep = 1; // 1ピクセルずつスクロール
 
       // スクロールを続けるループ
@@ -29,16 +55,22 @@ const EndrollPage = (
           clearInterval(scrollInterval);
         }
       }, (scrollDuration * 1000) / (scrollHeight / scrollStep));
-    }
+    });
 
-    // スクロールを開始
-    scrollCredits();
+    // 処理全体をまとめる
+    const endrollAnimations = async () => {
+      await unBlackout();
+      await wait(2.0);
+      await scrollCredits();
+    };
+    endrollAnimations();
   }, []);
 
   return (
     <>
       <div className="App">
         <div className="endroll-wrapper">
+          <div id="blackout"></div>
           <div id="you-found-the-hidden-command">You found the hidden command !</div>
           <div className="gap" id="gap-after-message"></div>
           <div id="frameworks">
@@ -58,6 +90,7 @@ const EndrollPage = (
               <li>各種個人ブログ</li>
               <li>ChatGPT-3.5</li>
               <li>ChatGPT-4o</li>
+              <li>Claude AI</li>
               <li>AI検索(リートン)</li>
               <li>みつき(リートン)</li>
             </ul>

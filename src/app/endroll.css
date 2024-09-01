@@ -1,5 +1,14 @@
 .endroll-wrapper {
-  animation: scroll 5s linear infinite;
+  #blackout {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 1;
+  }
   #you-found-the-hidden-command {
     height: 50vh;
     width: 100vw;
@@ -27,5 +36,9 @@
   }
   #thank-you-for-visiting {
     margin: 50vh 0;
+  }
+  #back-button {
+    cursor: pointer;
+    text-decoration: underline;
   }
 }

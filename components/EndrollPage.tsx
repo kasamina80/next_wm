@@ -15,14 +15,14 @@ const EndrollPage = (
     // 徐々に表れる
     const blackoutElement = document.querySelector("#blackout") as HTMLElement;
     const unBlackoutDuration = 2.0;
-    let currentOpacity = 1.0;
+    let currentBackgroundOpacity = 1.0;
     const frameRate = 50;
     const unBlackout = () => new Promise((resolve) => {
       const unBlackoutInterval = setInterval(() => {
-        currentOpacity -= unBlackoutDuration / frameRate;
-        blackoutElement.style.opacity = currentOpacity.toString();
-        console.log(currentOpacity);
-        if (currentOpacity <= 0) {
+        currentBackgroundOpacity -= unBlackoutDuration / frameRate;
+        blackoutElement.style.opacity = currentBackgroundOpacity.toString();
+        console.log(currentBackgroundOpacity);
+        if (currentBackgroundOpacity <= 0) {
           console.log("unBlackout ended");
           clearInterval(unBlackoutInterval);
           blackoutElement.remove();
@@ -53,8 +53,25 @@ const EndrollPage = (
         if (currentPosition + window.innerHeight - document.body.offsetHeight >= -1.0) {
           console.log("scroll ended");
           clearInterval(scrollInterval);
+          resolve(null);
         }
       }, (scrollDuration * 1000) / (scrollHeight / scrollStep));
+    });
+
+    const backLink = document.querySelector("#back-button") as HTMLElement;
+    const linkUnBlackoutDuration = 2.0;
+    let currentLinkOpacity = -1.0;
+    const showBackLink = () => new Promise((resolve) => {
+      const linkUnBlackoutInterval = setInterval(() => {
+        currentLinkOpacity += linkUnBlackoutDuration / frameRate;
+        backLink.style.opacity = (currentLinkOpacity >= 0 ? currentLinkOpacity : 0).toString();
+        console.log(currentLinkOpacity);
+        if (currentLinkOpacity >= 1.0) {
+          console.log("unBlackout ended");
+          clearInterval(linkUnBlackoutInterval);
+          resolve(null);
+        }
+      }, (linkUnBlackoutDuration * 1000) / frameRate);
     });
 
     // 処理全体をまとめる
@@ -62,6 +79,7 @@ const EndrollPage = (
       await unBlackout();
       await wait(2.0);
       await scrollCredits();
+      await showBackLink();
     };
     endrollAnimations();
   }, []);

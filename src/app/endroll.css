@@ -40,5 +40,6 @@
   #back-button {
     cursor: pointer;
     text-decoration: underline;
+    opacity: 0;
   }
 }

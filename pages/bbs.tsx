@@ -21,7 +21,6 @@ const deleteHandler = (postId: Number) => {
     const data = { postId: postId, password: password };
     const response = await fetch('/api/delete_bbs', { method: 'DELETE', body: JSON.stringify(data) });
     const result = await response.json();
-    console.log(response, result);
     if (response.status === 200) {
       // ステータスが200ならパスワードが正しく、APIがレコードを削除したので画面をリロードする
       window.location.reload();
@@ -54,18 +53,15 @@ const postList = (posts: Post[]): React.JSX.Element => {
 }
 
 export const getServerSideProps = (async () => {
-  // Fetch data from external API
+  // Prismaからデータを取ってくる
   const prisma = new PrismaClient();
   const fetchedPosts = await prisma.post.findMany();
-  console.log(fetchedPosts);
-  // Pass data to the page via props
+  // データをpropsとして渡す
   // returnしたものはJSONになるが、Dateはserializableではないので、もう1段JSONをかませる
   return { props: { postsJson: JSON.stringify(fetchedPosts) } };
 });
 
 const PostsPage = ({ postsJson }: { postsJson: string }) => {
-  // some useState thing goes here
-
   const posts: Post[] = JSON.parse(postsJson, (key, value) => {
     if (key == "created_at") {
       return new Date(value);
@@ -73,8 +69,6 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
       return value;
     }
   });
-
-  console.log(posts);
 
   const { register, handleSubmit, formState: { errors } } = useForm<PostFormValues>();
   const router = useRouter();
@@ -88,14 +82,11 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
             postList(posts)
           }
           <form className="post-form" onSubmit={ handleSubmit((data) => {
-            console.log(data);
             const hashedPassword = data.password === "" ? null : bcrypt.hashSync(data.password, 12); 
-            console.log(hashedPassword);
             const dataToSend = { ...data, password: hashedPassword }
               const fetchApi = async () => {
               const response = await fetch('/api/save_bbs', { method: 'POST', body: JSON.stringify(dataToSend) });
               const result = await response.json();
-              console.log(response, result);
               if (response.status === 200) {
                 router.reload();
               }

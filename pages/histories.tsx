@@ -50,18 +50,15 @@ const historyTable = (histories: WorkHistory[]): React.JSX.Element => {
 
 
 export const getServerSideProps = (async () => {
-  // Fetch data from external API
+  // Prismaからデータを取ってくる
   const prisma = new PrismaClient();
   const fetchedWorkHistories = await prisma.workHistory.findMany();
-  console.log(fetchedWorkHistories);
-  // Pass data to the page via props
+  // データをpropsとして渡す
   // returnしたものはJSONになるが、Dateはserializableではないので、もう1段JSONをかませる
   return { props: { historiesJson: JSON.stringify(fetchedWorkHistories) } };
 });
 
 const HistoriesPage = ({ historiesJson }: { historiesJson: string }) => {
-  // const [workHistories, setWorkHistories] = useState([] as WorkHistory[]);
-
   const histories: WorkHistory[] = JSON.parse(historiesJson, (key, value) => {
     if ((key == "start_on" || key == "end_on") && value !== null) {
       return new Date(value);
@@ -72,7 +69,6 @@ const HistoriesPage = ({ historiesJson }: { historiesJson: string }) => {
   const itEngineerHistories: ItEngineerHistory[] = itEngineerHistoriesFilter(histories);
   const idolHistories: IdolHistory[] = idolHistoriesFilter(histories);
   
-  console.log(histories);
   return (
     <div id="root">
       <Sidebar />

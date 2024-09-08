@@ -6,31 +6,21 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
 ) {
-  console.log("in api");
-
-  console.log(req);
   let count = req.cookies.count;
-  console.log(count);
 
   if (count === undefined || isNaN(parseInt(count))) {
     try {
-      console.log("db fetch");
       const prisma = new PrismaClient();
       const fetchedAccessCounter = await prisma.accessCounter.findUnique({ where: { id: 1 } });
-      console.log(fetchedAccessCounter);
-      // Pass data to the page via props
-      // +1 because it's a UU
+      // アクセス数がCookieに保存されていなかったらUUなので+1する
       const accessCount: number = fetchedAccessCounter!.count + 1;
       count = accessCount.toString();
 
-      // put it in DB
-      console.log("db write");
+      // 更新後の値をDBに保存する
       const result = await prisma.accessCounter.update({ where: { id: 1 }, data: { count: accessCount } });
     } catch (error) {
       console.error(error);
     }
-    console.log(count);
-    console.log("setting cookie");
     res.setHeader('Set-Cookie', cookie.serialize('count', count!));
   }
 

@@ -17,7 +17,7 @@ const NormalIndexPage = (
     successCount: number,
     setSuccessCount: Dispatch<SetStateAction<number>>,
     currentCommand: commandType,
-    setCurrentCommand: any,
+    setCurrentCommand: Dispatch<SetStateAction<commandType>>,
     setIsEndroll: Dispatch<SetStateAction<boolean>>
   }
 ) => {
@@ -36,7 +36,7 @@ const NormalIndexPage = (
     } else {
       const nextCommandTypePair = Object.entries(commands).find(([commandType, commands]) => commands[0] === event.key);
       if (nextCommandTypePair) {
-        setCurrentCommand(nextCommandTypePair[0]);
+        setCurrentCommand(nextCommandTypePair[0] as commandType);
         setSuccessCount(1);
         console.log(1);
       } else {

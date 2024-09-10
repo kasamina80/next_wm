@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import '../src/app/index.css';
 import '../src/app/app.scss';
 import '../src/app/home.scss';
@@ -8,10 +8,9 @@ import EndrollPage from '../components/EndrollPage';
 type commandType = "normal" | "vim";
 
 const IndexPage = () => {
-  const [successCount, setSuccessCount]: [number, Dispatch<SetStateAction<number>>] = useState(0);
-  // TODO: ここのanyを正確な型にする
-  const [currentCommand, setCurrentCommand]: [commandType, any] = useState("normal");
-  const [isEndroll, setIsEndroll]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+  const [successCount, setSuccessCount] = useState(0);
+  const [currentCommand, setCurrentCommand] = useState<commandType>("normal");
+  const [isEndroll, setIsEndroll] = useState(false);
 
   return (
     <div id="root">

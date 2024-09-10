@@ -73,8 +73,13 @@ dd {
   margin: 0;
 }
 
-.italic {
-  transform: skewX(-15deg);
+.italic-wrapper {
+  justify-content: center;
+  display: flex;
+  .italic {
+    transform: skewX(-15deg);
+    width: 95%;
+  }
 }
 
 .acronym-tooltip {

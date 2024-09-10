@@ -79,7 +79,9 @@ const HistoriesPage = ({ historiesJson }: { historiesJson: string }) => {
           historyTable(itEngineerHistories)
         }
         <h2 className="history-type">IDOL</h2>
-        <p className="kasamina italic">重なる想い、みんなとともに。<br />MORE MORE TYPE! のかさみなです!</p>
+        <div className="italic-wrapper">
+          <p className="kasamina italic">重なる想い、みんなとともに。<br />MORE MORE TYPE! のかさみなです!</p>
+        </div>
         <p className="history-type-description">平日は会社員、週末はアイドルとして活動しています。</p>
         {
           historyTable(idolHistories)

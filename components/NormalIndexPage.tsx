@@ -22,7 +22,6 @@ const NormalIndexPage = (
   }
 ) => {
   const { successCount, setSuccessCount, currentCommand, setCurrentCommand, setIsEndroll } = props;
-  // TODO: ここのanyを正確な型にする
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === commands[currentCommand][successCount]) {
       const newSuccessCount = successCount + 1;

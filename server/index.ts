@@ -3,13 +3,17 @@ import { createHTTPHandler } from '@trpc/server/adapters/standalone';
 import http from 'http';
 import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient();
+
 const appRouter = router({
   postList: publicProcedure
     .query(async () => {
-        const prisma = new PrismaClient();
-        return await prisma.post.findMany();
+      return await prisma.post.findMany();
     }),
-  // ...
+  workHistoryList: publicProcedure
+    .query(async () => {
+      return await prisma.workHistory.findMany();
+    }),
 });
 
 export type AppRouter = typeof appRouter;

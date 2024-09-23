@@ -3,7 +3,8 @@ import '../src/app/index.css'
 import '../src/app/app.scss'
 import '../src/app/histories.css'
 import type { WorkHistory } from "../seeds/histories_type.ts";
-import { PrismaClient } from '@prisma/client';
+import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
+import type { AppRouter } from '../server';
 
 type ItEngineerHistory = WorkHistory & { work_type: "it_engineer" };
 type IdolHistory = WorkHistory & { work_type: "idol" };
@@ -48,11 +49,23 @@ const historyTable = (histories: WorkHistory[]): React.JSX.Element => {
   );
 }
 
+const trpc = createTRPCProxyClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: 'http://localhost:4000',
+      fetch(url, options) {
+        return fetch(url, {
+          ...options,
+          credentials: 'include'
+        });
+      },
+    }),
+  ],
+});
 
 export const getServerSideProps = (async () => {
-  // Fetch data from external API
-  const prisma = new PrismaClient();
-  const fetchedWorkHistories = await prisma.workHistory.findMany();
+  console.log(trpc.workHistoryList);
+  const fetchedWorkHistories = await trpc.workHistoryList.query();
   console.log(fetchedWorkHistories);
   // Pass data to the page via props
   // returnしたものはJSONになるが、Dateはserializableではないので、もう1段JSONをかませる

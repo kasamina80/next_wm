@@ -3,10 +3,11 @@ import '../src/app/index.css'
 import '../src/app/app.scss'
 import '../src/app/bbs.scss'
 import type { Post } from "../seeds/post_type.ts";
-import { PrismaClient } from '@prisma/client';
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import bcrypt from "bcryptjs";
+import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
+import type { AppRouter } from '../server';
 
 type PostFormValues = {
   username: string,
@@ -53,10 +54,23 @@ const postList = (posts: Post[]): React.JSX.Element => {
   );
 }
 
+const trpc = createTRPCProxyClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: 'http://localhost:4000',
+      fetch(url, options) {
+        return fetch(url, {
+          ...options,
+          credentials: 'include', // この行を追加
+        });
+      },
+    }),
+  ],
+});
+
 export const getServerSideProps = (async () => {
   // Fetch data from external API
-  const prisma = new PrismaClient();
-  const fetchedPosts = await prisma.post.findMany();
+  const fetchedPosts = await trpc.postList.query();
   console.log(fetchedPosts);
   // Pass data to the page via props
   // returnしたものはJSONになるが、Dateはserializableではないので、もう1段JSONをかませる

@@ -35,10 +35,17 @@ npm run seed
 npm run dev
 ```
 
+別のコンソールを開いて実行:
+```
+npm run start-server
+```
+
+tRPCを使用するためDB接続用のAPIサーバーをアプリケーションサーバーとは別に立てています。
+
 ### 解説
 - `npm run seed`は`bundle exec rails db:seed-fu`に対応します。
   - 実際には、`ruby -e "eval(File.read('seeds.rb'))"`に近いことをやっています。
 
 ## 開発関連
 
-テーブル名は`WorkHistory`のような形式で作成される
+テーブル名は`workhistory`のような形式で作成される

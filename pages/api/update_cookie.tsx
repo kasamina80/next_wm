@@ -8,7 +8,6 @@ export default async function handler(
 ) {
   console.log("in api");
 
-  console.log(req);
   let count = req.cookies.count;
   console.log(count);
 
@@ -17,11 +16,11 @@ export default async function handler(
       console.log("db fetch");
       const prisma = new PrismaClient();
       const fetchedAccessCounter = await prisma.accessCounter.findUnique({ where: { id: 1 } });
-      console.log(fetchedAccessCounter);
       // Pass data to the page via props
       // +1 because it's a UU
       const accessCount: number = fetchedAccessCounter!.count + 1;
       count = accessCount.toString();
+      console.log(count);
 
       // put it in DB
       console.log("db write");

@@ -15,19 +15,36 @@ type PostFormValues = {
   content: string
 };
 
-const deleteHandler = (postId: Number) => {
+const trpc = createTRPCProxyClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: 'http://localhost:4000',
+      fetch(url, options) {
+        return fetch(url, {
+          ...options,
+          credentials: 'include'
+        });
+      },
+    }),
+  ],
+});
+
+const deleteHandler = (postId: number) => {
   const password = prompt("削除用パスワードを入力してください");
+
+  // キャンセルボタンが押された場合
+  if (password === null) { return; }
+
   // パスワードが正しいかAPIに聞いて確かめる
   const fetchApi = async () => {
     const data = { postId: postId, password: password };
-    const response = await fetch('/api/delete_bbs', { method: 'DELETE', body: JSON.stringify(data) });
-    const result = await response.json();
-    console.log(response, result);
-    if (response.status === 200) {
-      // ステータスが200ならパスワードが正しく、APIがレコードを削除したので画面をリロードする
+    const response = await trpc.postDelete.mutate(data);
+    console.log(response);
+    if (response) {
+      // レスポンスがオブジェクトならパスワードが正しく、APIがレコードを削除したので画面をリロードする
       window.location.reload();
     } else {
-      // それ以外のときはパスワードが違うので何も起こらない
+      // パスワードが違うなどエラーの時はundefinedが返る
       alert("パスワードが違います");
     }
   };
@@ -53,20 +70,6 @@ const postList = (posts: Post[]): React.JSX.Element => {
     </div>
   );
 }
-
-const trpc = createTRPCProxyClient<AppRouter>({
-  links: [
-    httpBatchLink({
-      url: 'http://localhost:4000',
-      fetch(url, options) {
-        return fetch(url, {
-          ...options,
-          credentials: 'include'
-        });
-      },
-    }),
-  ],
-});
 
 export const getServerSideProps = (async () => {
   // Fetch data from external API
@@ -106,15 +109,15 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
             const hashedPassword = data.password === "" ? null : bcrypt.hashSync(data.password, 12); 
             console.log(hashedPassword);
             const dataToSend = { ...data, password: hashedPassword }
-              const fetchApi = async () => {
-              const response = await fetch('/api/save_bbs', { method: 'POST', body: JSON.stringify(dataToSend) });
-              const result = await response.json();
-              console.log(response, result);
-              if (response.status === 200) {
+            const postByTrpc = async () => {
+              try {
+                await trpc.postCreate.mutate(dataToSend);
                 router.reload();
+              } catch (error) {
+                console.log(error);
               }
             };
-            fetchApi();
+            postByTrpc();
           }) }>
             <div className="validation-errors">
               <div>{errors.username && "名前を入力してください"}</div>

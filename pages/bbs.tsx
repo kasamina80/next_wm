@@ -35,7 +35,7 @@ const deleteHandler = (postId: number) => {
   // キャンセルボタンが押された場合
   if (password === null) { return; }
 
-  // パスワードが正しいかAPIに聞いて確かめる
+  // パスワードが正しいかバックエンドに聞いて確かめる
   const fetchApi = async () => {
     const data = { postId: postId, password: password };
     const response = await trpc.postDelete.mutate(data);
@@ -71,9 +71,9 @@ const postList = (posts: Post[]): React.JSX.Element => {
 }
 
 export const getServerSideProps = (async () => {
-  // Fetch data from external API
+  // tRPCで一覧を取得
   const fetchedPosts = await trpc.postList.query();
-  // Pass data to the page via props
+  // propsとしてデータをフロントに渡す
   // returnしたものはJSONになるが、Dateはserializableではないので、もう1段JSONをかませる
   return { props: { postsJson: JSON.stringify(fetchedPosts) } };
 });

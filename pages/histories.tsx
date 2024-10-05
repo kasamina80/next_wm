@@ -9,14 +9,17 @@ import type { AppRouter } from '../server';
 type ItEngineerHistory = WorkHistory & { work_type: "it_engineer" };
 type IdolHistory = WorkHistory & { work_type: "idol" };
 
+// エンジニアの経歴
 const itEngineerHistoriesFilter = (histories: WorkHistory[]): ItEngineerHistory[] => {
   return histories.filter((history): history is ItEngineerHistory => history.work_type === "it_engineer");
 }
 
+// アイドルの経歴
 const idolHistoriesFilter = (histories: WorkHistory[]): IdolHistory[] => {
   return histories.filter((history): history is IdolHistory => history.work_type === "idol");
 }
 
+// 日付テキストを生成
 const historyToDateText = (history: WorkHistory): string => {
   const { start_on, end_on } = history;
   if (end_on !== null) {
@@ -30,6 +33,7 @@ const historyToDateText = (history: WorkHistory): string => {
   }
 }
 
+// 経歴一覧HTMLを生成
 const historyTable = (histories: WorkHistory[]): React.JSX.Element => {
   return (
     <div className="history-table-wrapper">
@@ -64,8 +68,9 @@ const trpc = createTRPCProxyClient<AppRouter>({
 });
 
 export const getServerSideProps = (async () => {
+  // tRPCで一覧を取得
   const fetchedWorkHistories = await trpc.workHistoryList.query();
-  // Pass data to the page via props
+  // propsとしてデータをフロントに渡す
   // returnしたものはJSONになるが、Dateはserializableではないので、もう1段JSONをかませる
   return { props: { historiesJson: JSON.stringify(fetchedWorkHistories) } };
 });

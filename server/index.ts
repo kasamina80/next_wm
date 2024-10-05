@@ -78,7 +78,6 @@ const appRouter = router({
           return undefined;
         }
     
-        console.log("db delete");
         return await prisma.post.delete({ where: { id: postId } });
       } catch (error) {
         console.error(error);

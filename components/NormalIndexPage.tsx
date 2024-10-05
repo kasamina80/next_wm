@@ -23,11 +23,9 @@ const NormalIndexPage = (
 ) => {
   const { successCount, setSuccessCount, currentCommand, setCurrentCommand, setIsEndroll } = props;
   const handleKeyDown = (event: KeyboardEvent) => {
-    console.log(event.key);
     if (event.key === commands[currentCommand][successCount]) {
       const newSuccessCount = successCount + 1;
       setSuccessCount(newSuccessCount);
-      console.log(newSuccessCount);
       if (newSuccessCount == commands[currentCommand].length) {
         setSuccessCount(0);
         setIsEndroll(true);
@@ -37,7 +35,6 @@ const NormalIndexPage = (
       if (nextCommandTypePair) {
         setCurrentCommand(nextCommandTypePair[0] as commandType);
         setSuccessCount(1);
-        console.log(1);
       } else {
         setSuccessCount(0);
       }

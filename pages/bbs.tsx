@@ -39,7 +39,6 @@ const deleteHandler = (postId: number) => {
   const fetchApi = async () => {
     const data = { postId: postId, password: password };
     const response = await trpc.postDelete.mutate(data);
-    console.log(response);
     if (response) {
       // レスポンスがオブジェクトならパスワードが正しく、APIがレコードを削除したので画面をリロードする
       window.location.reload();
@@ -74,7 +73,6 @@ const postList = (posts: Post[]): React.JSX.Element => {
 export const getServerSideProps = (async () => {
   // Fetch data from external API
   const fetchedPosts = await trpc.postList.query();
-  console.log(fetchedPosts);
   // Pass data to the page via props
   // returnしたものはJSONになるが、Dateはserializableではないので、もう1段JSONをかませる
   return { props: { postsJson: JSON.stringify(fetchedPosts) } };
@@ -91,8 +89,6 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
     }
   });
 
-  console.log(posts);
-
   const { register, handleSubmit, formState: { errors } } = useForm<PostFormValues>();
   const router = useRouter();
 
@@ -105,16 +101,13 @@ const PostsPage = ({ postsJson }: { postsJson: string }) => {
             postList(posts)
           }
           <form className="post-form" onSubmit={ handleSubmit((data) => {
-            console.log(data);
             const hashedPassword = data.password === "" ? null : bcrypt.hashSync(data.password, 12); 
-            console.log(hashedPassword);
             const dataToSend = { ...data, password: hashedPassword }
             const postByTrpc = async () => {
               try {
                 await trpc.postCreate.mutate(dataToSend);
                 router.reload();
               } catch (error) {
-                console.log(error);
               }
             };
             postByTrpc();

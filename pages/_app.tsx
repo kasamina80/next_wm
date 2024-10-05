@@ -11,7 +11,6 @@ function App({ Component, pageProps, router }: AppProps) {
       const result = await response.json();
       const accessCount = parseInt(result.message);
       store.dispatch(setCount(accessCount));
-      console.log(response, result, accessCount);
     };
     fetchApi();
   }, [router.asPath]);

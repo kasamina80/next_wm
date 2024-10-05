@@ -64,9 +64,7 @@ const trpc = createTRPCProxyClient<AppRouter>({
 });
 
 export const getServerSideProps = (async () => {
-  console.log(trpc.workHistoryList);
   const fetchedWorkHistories = await trpc.workHistoryList.query();
-  console.log(fetchedWorkHistories);
   // Pass data to the page via props
   // returnしたものはJSONになるが、Dateはserializableではないので、もう1段JSONをかませる
   return { props: { historiesJson: JSON.stringify(fetchedWorkHistories) } };
@@ -85,7 +83,6 @@ const HistoriesPage = ({ historiesJson }: { historiesJson: string }) => {
   const itEngineerHistories: ItEngineerHistory[] = itEngineerHistoriesFilter(histories);
   const idolHistories: IdolHistory[] = idolHistoriesFilter(histories);
   
-  console.log(histories);
   return (
     <div id="root">
       <Sidebar />

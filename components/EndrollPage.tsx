@@ -21,9 +21,7 @@ const EndrollPage = (
       const unBlackoutInterval = setInterval(() => {
         currentBackgroundOpacity -= unBlackoutDuration / frameRate;
         blackoutElement.style.opacity = currentBackgroundOpacity.toString();
-        console.log(currentBackgroundOpacity);
         if (currentBackgroundOpacity <= 0) {
-          console.log("unBlackout ended");
           clearInterval(unBlackoutInterval);
           blackoutElement.remove();
           resolve(null);
@@ -49,9 +47,7 @@ const EndrollPage = (
       const scrollInterval = setInterval(() => {
         const currentPosition = window.scrollY;
         window.scrollBy(0, scrollStep);
-        console.log(currentPosition, scrollHeight, window.innerHeight, document.body.offsetHeight);
         if (currentPosition + window.innerHeight - document.body.offsetHeight >= -1.0) {
-          console.log("scroll ended");
           clearInterval(scrollInterval);
           resolve(null);
         }
@@ -65,9 +61,7 @@ const EndrollPage = (
       const linkUnBlackoutInterval = setInterval(() => {
         currentLinkOpacity += linkUnBlackoutDuration / frameRate;
         backLink.style.opacity = (currentLinkOpacity >= 0 ? currentLinkOpacity : 0).toString();
-        console.log(currentLinkOpacity);
         if (currentLinkOpacity >= 1.0) {
-          console.log("unBlackout ended");
           clearInterval(linkUnBlackoutInterval);
           resolve(null);
         }

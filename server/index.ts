@@ -8,6 +8,22 @@ import { z } from 'zod';
 const prisma = new PrismaClient();
 
 const appRouter = router({
+  // アクセス数取得
+  getCurrentAccessCount: publicProcedure
+    .query(async () => {
+      const fetchedAccessCounter = await prisma.accessCounter.findUnique({ where: { id: 1 } });
+      return fetchedAccessCounter!.count;
+    }),
+
+  // アクセス数更新
+  setAccessCount: publicProcedure
+    .input(z.object({
+      count: z.number()
+    }))
+    .mutation(async (opts) => {
+      await prisma.accessCounter.update({ where: { id: 1 }, data: { count: opts.input.count } });
+    }),
+
   // 経歴一覧
   workHistoryList: publicProcedure
     .query(async () => {

@@ -88,7 +88,9 @@ dd {
   color: #fff;
   // Bootstrapは.acronym-tooltipのみの指定のためさらに詳細度を上げて指定する
   &.tooltip{
+    position: absolute;
     margin-top: 0.45em;
+    z-index: 1;
   }
 }
 
